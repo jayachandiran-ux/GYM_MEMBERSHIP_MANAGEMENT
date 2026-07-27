@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Add Member</title>
+
+    <link rel="stylesheet" href="css/member.css">
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
+
+    </div>
+
+    <div class="member-box">
+
+        <h3>Add New Member</h3>
+
+        <!-- Show error message if save failed -->
+        <script>
+            if (window.location.search.indexOf("error=1") !== -1) {
+                document.write('<p style="color:red;text-align:center;">Failed to add member. Phone or Email may already exist.</p>');
+            }
+        </script>
+
+        <form action="api/members" method="post">
+
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Enter Full Name" required>
+
+            <label>Age</label>
+            <input type="number" name="age" placeholder="Enter Age" required>
+
+            <label>Gender</label>
+
+            <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Phone Number</label>
+            <input type="text" name="phone" placeholder="Enter Phone Number">
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter Email">
+
+            <label>Address</label>
+            <textarea name="address" placeholder="Enter Address"></textarea>
+
+            <label>Membership Plan</label>
+
+            <select name="plan">
+                <option value="Basic">Basic</option>
+                <option value="Standard">Standard</option>
+                <option value="Premium">Premium</option>
+            </select>
+
+            <label>Join Date</label>
+            <input type="date" name="joinDate">
+
+            <label>Expiry Date</label>
+            <input type="date" name="expiryDate">
+
+            <div class="buttons">
+
+                <button type="submit">Save</button>
+
+                <button type="reset">Clear</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

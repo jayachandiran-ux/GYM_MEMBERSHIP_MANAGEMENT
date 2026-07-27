@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Gym Membership Management</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/login.css">
+
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <h1>GYM MEMBERSHIP MANAGEMENT</h1>
+
+        <h3>Admin Login</h3>
+
+        <!-- Show error message if login failed -->
+        <script>
+            if (window.location.search.indexOf("error=1") !== -1) {
+                document.write('<p style="color:red;text-align:center;">Invalid Username or Password</p>');
+            }
+        </script>
+
+        <form action="api/login" method="post">
+
+            <label for="username">Username</label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter Username"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter Password"
+                required
+            >
+
+            <div class="button-box">
+
+                <button type="submit">Login</button>
+
+                <button type="reset">Clear</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

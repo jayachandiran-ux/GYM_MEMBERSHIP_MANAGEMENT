@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Trainer</title>
+
+    <link rel="stylesheet" href="css/trainer.css">
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
+
+    </div>
+
+    <div class="trainer-box">
+
+        <h3>Trainer Assignment</h3>
+
+        <!-- Show error message if save failed -->
+        <script>
+            if (window.location.search.indexOf("error=1") !== -1) {
+                document.write('<p style="color:red;text-align:center;">Failed to assign trainer. Please check the Member ID.</p>');
+            }
+        </script>
+
+        <form action="api/trainers" method="post">
+
+            <label>Member ID</label>
+            <input type="number" name="memberId" placeholder="Enter Member ID">
+
+            <label>Member Name</label>
+            <input type="text" name="memberName" placeholder="Enter Member Name">
+
+            <label>Select Trainer</label>
+
+            <select name="trainer">
+
+                <option value="Arun">Arun</option>
+                <option value="Karthik">Karthik</option>
+                <option value="Vijay">Vijay</option>
+                <option value="Rahul">Rahul</option>
+
+            </select>
+
+            <label>Specialization</label>
+
+            <select name="specialization">
+
+                <option value="Weight Loss">Weight Loss</option>
+                <option value="Body Building">Body Building</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Yoga">Yoga</option>
+
+            </select>
+
+            <label>Assigned Date</label>
+            <input type="date" name="assignedDate">
+
+            <div class="buttons">
+
+                <button type="submit">Assign</button>
+
+                <button type="reset">Clear</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

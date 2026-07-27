@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Payment</title>
+
+    <link rel="stylesheet" href="css/payment.css">
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
+
+    </div>
+
+    <div class="payment-box">
+
+        <h3>Member Payment</h3>
+
+        <!-- Show error message if save failed -->
+        <script>
+            if (window.location.search.indexOf("error=1") !== -1) {
+                document.write('<p style="color:red;text-align:center;">Failed to save payment. Please check the Member ID.</p>');
+            }
+        </script>
+
+        <form action="api/payments" method="post">
+
+            <label>Member ID</label>
+            <input type="number" name="memberId" placeholder="Enter Member ID">
+
+            <label>Amount</label>
+            <input type="number" name="amount" placeholder="Enter Amount">
+
+            <label>Payment Date</label>
+            <input type="date" name="paymentDate">
+
+            <label>Payment Method</label>
+
+            <select name="paymentMethod">
+
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="Card">Card</option>
+
+            </select>
+
+            <div class="buttons">
+
+                <button type="submit">Pay</button>
+
+                <button type="reset">Clear</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Attendance</title>
+
+    <link rel="stylesheet" href="css/attendance.css">
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
+
+    </div>
+
+    <div class="attendance-box">
+
+        <h3>Member Attendance</h3>
+
+        <!-- Show error message if save failed -->
+        <script>
+            if (window.location.search.indexOf("error=1") !== -1) {
+                document.write('<p style="color:red;text-align:center;">Failed to save attendance. Please check the Member ID.</p>');
+            }
+        </script>
+
+        <form action="api/attendance" method="post">
+
+            <label>Member ID</label>
+            <input type="number" name="memberId" placeholder="Enter Member ID">
+
+            <label>Date</label>
+            <input type="date" name="date">
+
+            <label>Check In Time</label>
+            <input type="time" name="checkInTime">
+
+            <label>Status</label>
+
+            <select name="status">
+
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+
+            </select>
+
+            <div class="buttons">
+
+                <button type="submit">Save</button>
+
+                <button type="reset">Clear</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
