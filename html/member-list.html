@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member List</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/memberlist.css">
+</head>
+<body>
+
+    <div class="header">
+        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
+    </div>
+
+    <div class="list-box">
+
+        <h3>Member List</h3>
+
+        <div class="top-buttons">
+            <a href="dashboard.html" class="btn-back">&#8592; Back to Dashboard</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" onkeyup="searchTable()"
+                       placeholder="Search by name, phone, email...">
+            </div>
+        </div>
+
+        <div id="tableContainer">
+            <p style="text-align:center; color:#888;">Loading members...</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Load member table from servlet
+        fetch('api/member-list')
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+                document.getElementById('tableContainer').innerHTML = html;
+            })
+            .catch(function() {
+                document.getElementById('tableContainer').innerHTML =
+                    '<p style="color:red;text-align:center;">Failed to load members. Please try again.</p>';
+            });
+
+        function searchTable() {
+            var input = document.getElementById('searchInput').value.toLowerCase();
+            var table = document.querySelector('#memberTable');
+            if (!table) return;
+            var rows = table.getElementsByTagName('tr');
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                var match = false;
+                for (var j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toLowerCase().indexOf(input) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match ? '' : 'none';
+            }
+        }
+
+        function confirmDelete(memberId, memberName) {
+            if (confirm('Are you sure you want to delete member:\n' + memberName + '?\n\nThis cannot be undone.')) {
+                window.location.href = 'api/member-delete?id=' + memberId;
+            }
+        }
+    </script>
+
+</body>
+</html>

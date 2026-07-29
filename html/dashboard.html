@@ -1,50 +1,141 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-    <title>Dashboard</title>
-
+    <title>Dashboard - GYM Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
     <link rel="stylesheet" href="css/dashboard.css">
-
 </head>
-
 <body>
 
-    <div class="header">
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="brand">
+            <img src="/images/gym_management_logo.avif" alt="Logo" style="width:36px;height:36px;object-fit:contain;border-radius:6px;">
+            GYM MEMBERSHIP MANAGEMENT
+        </div>
+        <div class="nav-right">
+            <span class="admin-badge">👤 <span id="adminName">Admin</span></span>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </div>
+    </nav>
 
-        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
-
+    <!-- ===== WELCOME BANNER ===== -->
+    <div class="welcome-banner">
+        <div>
+            <h2>Welcome back, <span id="welcomeName">Admin</span> 👋</h2>
+            <p>Here's what's happening at your gym today</p>
+        </div>
+        <div class="date" id="currentDate"></div>
     </div>
+
+    <!-- ===== STATS ROW ===== -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon orange">👥</div>
+            <div class="stat-info">
+                <h3 id="totalMembers">...</h3>
+                <p>Total Members</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">💰</div>
+            <div class="stat-info">
+                <h3 id="totalPayments">...</h3>
+                <p>Total Payments</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon blue">📋</div>
+            <div class="stat-info">
+                <h3 id="todayAttendance">...</h3>
+                <p>Today's Attendance</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon purple">🏃</div>
+            <div class="stat-info">
+                <h3 id="activeMembers">...</h3>
+                <p>Active Members</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODULE CARDS ===== -->
+    <div class="section-title">📌 Modules</div>
 
     <div class="container">
 
-        <div class="card">
-            <a href="add-member.html">Add Member</a>
-        </div>
+        <a href="add-member.html" class="card">
+            <span class="card-icon">➕</span>
+            <div class="card-title">Add Member</div>
+            <div class="card-desc">Register a new gym member</div>
+        </a>
 
-        <div class="card">
-            <a href="attendance.html">Attendance</a>
-        </div>
+        <a href="api/member-list" class="card">
+            <span class="card-icon">👥</span>
+            <div class="card-title">Member List</div>
+            <div class="card-desc">View, search & manage members</div>
+        </a>
 
-        <div class="card">
-            <a href="payment.html">Payment</a>
-        </div>
+        <a href="attendance.html" class="card">
+            <span class="card-icon">📋</span>
+            <div class="card-title">Attendance</div>
+            <div class="card-desc">Mark daily attendance</div>
+        </a>
 
-        <div class="card">
-            <a href="trainer.html">Trainer</a>
-        </div>
+        <a href="payment.html" class="card">
+            <span class="card-icon">💳</span>
+            <div class="card-title">Payment</div>
+            <div class="card-desc">Record member payments</div>
+        </a>
 
-        <div class="card">
-            <a href="api/report">Reports</a>
-        </div>
+        <a href="trainer.html" class="card">
+            <span class="card-icon">🏋️</span>
+            <div class="card-title">Trainer</div>
+            <div class="card-desc">Assign trainers to members</div>
+        </a>
 
-        <div class="card">
-            <a href="login.html">Logout</a>
-        </div>
+        <a href="api/report" class="card">
+            <span class="card-icon">📊</span>
+            <div class="card-title">Reports</div>
+            <div class="card-desc">View full member report</div>
+        </a>
 
     </div>
 
-</body>
+    <script>
+        // Show current date
+        const now = new Date();
+        document.getElementById('currentDate').textContent =
+            now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
+        // Fetch logged-in username from session
+        fetch('/api/session')
+            .then(r => r.json())
+            .then(data => {
+                const name = data.username || 'Admin';
+                // Capitalize first letter
+                const display = name.charAt(0).toUpperCase() + name.slice(1);
+                document.getElementById('adminName').textContent = display;
+                document.getElementById('welcomeName').textContent = display;
+            });
+
+        // Load stats from backend
+        fetch('/api/stats')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('totalMembers').textContent    = data.totalMembers    || 0;
+                document.getElementById('totalPayments').textContent   = data.totalPayments   || 0;
+                document.getElementById('todayAttendance').textContent = data.todayAttendance || 0;
+                document.getElementById('activeMembers').textContent   = data.activeMembers   || 0;
+            })
+            .catch(() => {
+                ['totalMembers','totalPayments','todayAttendance','activeMembers']
+                    .forEach(id => document.getElementById(id).textContent = '-');
+            });
+    </script>
+
+</body>
 </html>

@@ -1,65 +1,52 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <title>Attendance</title>
-
-    <link rel="stylesheet" href="css/attendance.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
-
 <body>
 
     <div class="header">
-
-        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
-
+        <h2>🏋️ GYM MEMBERSHIP MANAGEMENT</h2>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </div>
 
     <div class="attendance-box">
 
-        <h3>Member Attendance</h3>
+        <h3>📋 Mark Attendance</h3>
 
-        <!-- Show error message if save failed -->
-        <script>
-            if (window.location.search.indexOf("error=1") !== -1) {
-                document.write('<p style="color:red;text-align:center;">Failed to save attendance. Please check the Member ID.</p>');
-            }
-        </script>
+        <div style="padding: 22px 25px 25px;">
 
-        <form action="api/attendance" method="post">
+            <form id="attendanceForm">
 
-            <label>Member ID</label>
-            <input type="number" name="memberId" placeholder="Enter Member ID">
+                <label>Member ID</label>
+                <input type="number" name="memberId" placeholder="Enter Member ID" required>
 
-            <label>Date</label>
-            <input type="date" name="date">
+                <label>Date</label>
+                <input type="date" name="date" required>
 
-            <label>Check In Time</label>
-            <input type="time" name="checkInTime">
+                <label>Check In Time</label>
+                <input type="time" name="checkInTime" required>
 
-            <label>Status</label>
+                <label>Status</label>
+                <select name="status">
+                    <option value="Present">✅ Present</option>
+                    <option value="Absent">❌ Absent</option>
+                </select>
 
-            <select name="status">
+                <div class="buttons">
+                    <button type="submit">💾 Save Attendance</button>
+                    <button type="reset">✕ Clear</button>
+                </div>
 
-                <option value="Present">Present</option>
-                <option value="Absent">Absent</option>
+            </form>
 
-            </select>
-
-            <div class="buttons">
-
-                <button type="submit">Save</button>
-
-                <button type="reset">Clear</button>
-
-            </div>
-
-        </form>
-
+        </div>
     </div>
 
+    <script src="app.js"></script>
 </body>
-
 </html>

@@ -1,78 +1,62 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-    <title>Trainer</title>
-
-    <link rel="stylesheet" href="css/trainer.css">
-
+    <title>Trainer Assignment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
-
 <body>
 
     <div class="header">
-
-        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
-
+        <h2>🏋️ GYM MEMBERSHIP MANAGEMENT</h2>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </div>
 
     <div class="trainer-box">
 
-        <h3>Trainer Assignment</h3>
+        <h3>🏋️ Assign Trainer</h3>
 
-        <!-- Show error message if save failed -->
-        <script>
-            if (window.location.search.indexOf("error=1") !== -1) {
-                document.write('<p style="color:red;text-align:center;">Failed to assign trainer. Please check the Member ID.</p>');
-            }
-        </script>
+        <div style="padding: 22px 25px 25px;">
 
-        <form action="api/trainers" method="post">
+            <form id="trainerForm">
 
-            <label>Member ID</label>
-            <input type="number" name="memberId" placeholder="Enter Member ID">
+                <label>Member ID</label>
+                <input type="number" name="memberId" placeholder="Enter Member ID" required>
 
-            <label>Member Name</label>
-            <input type="text" name="memberName" placeholder="Enter Member Name">
+                <label>Member Name</label>
+                <input type="text" name="memberName" placeholder="Enter Member Name">
 
-            <label>Select Trainer</label>
+                <label>Select Trainer</label>
+                <select name="trainer">
+                    <option value="Arun">Arun</option>
+                    <option value="Karthik">Karthik</option>
+                    <option value="Vijay">Vijay</option>
+                    <option value="Rahul">Rahul</option>
+                </select>
 
-            <select name="trainer">
+                <label>Specialization</label>
+                <select name="specialization">
+                    <option value="Weight Loss">🏃 Weight Loss</option>
+                    <option value="Body Building">💪 Body Building</option>
+                    <option value="Fitness">🤸 Fitness</option>
+                    <option value="Yoga">🧘 Yoga</option>
+                </select>
 
-                <option value="Arun">Arun</option>
-                <option value="Karthik">Karthik</option>
-                <option value="Vijay">Vijay</option>
-                <option value="Rahul">Rahul</option>
+                <label>Assigned Date</label>
+                <input type="date" name="assignedDate" required>
 
-            </select>
+                <div class="buttons">
+                    <button type="submit">✅ Assign Trainer</button>
+                    <button type="reset">✕ Clear</button>
+                </div>
 
-            <label>Specialization</label>
+            </form>
 
-            <select name="specialization">
-
-                <option value="Weight Loss">Weight Loss</option>
-                <option value="Body Building">Body Building</option>
-                <option value="Fitness">Fitness</option>
-                <option value="Yoga">Yoga</option>
-
-            </select>
-
-            <label>Assigned Date</label>
-            <input type="date" name="assignedDate">
-
-            <div class="buttons">
-
-                <button type="submit">Assign</button>
-
-                <button type="reset">Clear</button>
-
-            </div>
-
-        </form>
-
+        </div>
     </div>
 
+    <script src="app.js"></script>
 </body>
-
 </html>

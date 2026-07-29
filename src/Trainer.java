@@ -31,17 +31,17 @@ public class Trainer {
 
     }
 
-    public void assignTrainer(int memberId, String memberName, String trainerName, String specialization, String assignedDate) {
+    public void assignTrainer(int memberId, int trainerId, String assignedDate) {
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "INSERT INTO trainers(member_id, member_name, trainer_name, specialization, assigned_date) VALUES(?,?,?,?,?)";
+            // Insert into trainer_assignments using correct schema
+            String sql = "INSERT INTO trainer_assignments(member_id, trainer_id, assigned_date) VALUES(?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, memberId);
-            ps.setString(2, memberName);
-            ps.setString(3, trainerName);
-            ps.setString(4, specialization);
-            ps.setString(5, assignedDate);
+            ps.setInt(2, trainerId);
+            ps.setString(3, assignedDate);
             ps.executeUpdate();
+            ps.close();
             con.close();
         }
         catch (Exception e) {

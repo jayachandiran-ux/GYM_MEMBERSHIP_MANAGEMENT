@@ -1,66 +1,53 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <title>Payment</title>
-
-    <link rel="stylesheet" href="css/payment.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
-
 <body>
 
     <div class="header">
-
-        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
-
+        <h2>🏋️ GYM MEMBERSHIP MANAGEMENT</h2>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </div>
 
     <div class="payment-box">
 
-        <h3>Member Payment</h3>
+        <h3>💳 Record Payment</h3>
 
-        <!-- Show error message if save failed -->
-        <script>
-            if (window.location.search.indexOf("error=1") !== -1) {
-                document.write('<p style="color:red;text-align:center;">Failed to save payment. Please check the Member ID.</p>');
-            }
-        </script>
+        <div style="padding: 22px 25px 25px;">
 
-        <form action="api/payments" method="post">
+            <form id="paymentForm">
 
-            <label>Member ID</label>
-            <input type="number" name="memberId" placeholder="Enter Member ID">
+                <label>Member ID</label>
+                <input type="number" name="memberId" placeholder="Enter Member ID" required>
 
-            <label>Amount</label>
-            <input type="number" name="amount" placeholder="Enter Amount">
+                <label>Amount (₹)</label>
+                <input type="number" name="amount" placeholder="Enter amount" required min="1">
 
-            <label>Payment Date</label>
-            <input type="date" name="paymentDate">
+                <label>Payment Date</label>
+                <input type="date" name="paymentDate" required>
 
-            <label>Payment Method</label>
+                <label>Payment Method</label>
+                <select name="paymentMethod">
+                    <option value="Cash">💵 Cash</option>
+                    <option value="UPI">📱 UPI</option>
+                    <option value="Card">💳 Card</option>
+                </select>
 
-            <select name="paymentMethod">
+                <div class="buttons">
+                    <button type="submit">✅ Record Payment</button>
+                    <button type="reset">✕ Clear</button>
+                </div>
 
-                <option value="Cash">Cash</option>
-                <option value="UPI">UPI</option>
-                <option value="Card">Card</option>
+            </form>
 
-            </select>
-
-            <div class="buttons">
-
-                <button type="submit">Pay</button>
-
-                <button type="reset">Clear</button>
-
-            </div>
-
-        </form>
-
+        </div>
     </div>
 
+    <script src="app.js"></script>
 </body>
-
 </html>

@@ -1,84 +1,72 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <title>Add Member</title>
-
-    <link rel="stylesheet" href="css/member.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
-
 <body>
 
     <div class="header">
-
-        <h2>GYM MEMBERSHIP MANAGEMENT</h2>
-
+        <h2>🏋️ GYM MEMBERSHIP MANAGEMENT</h2>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </div>
 
     <div class="member-box">
 
-        <h3>Add New Member</h3>
+        <h3>➕ Add New Member</h3>
 
-        <!-- Show error message if save failed -->
-        <script>
-            if (window.location.search.indexOf("error=1") !== -1) {
-                document.write('<p style="color:red;text-align:center;">Failed to add member. Phone or Email may already exist.</p>');
-            }
-        </script>
+        <div style="padding: 22px 25px 25px;">
 
-        <form action="api/members" method="post">
+            <form id="memberForm">
 
-            <label>Full Name</label>
-            <input type="text" name="name" placeholder="Enter Full Name" required>
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="Enter full name" required>
 
-            <label>Age</label>
-            <input type="number" name="age" placeholder="Enter Age" required>
+                <label>Age</label>
+                <input type="number" name="age" placeholder="Enter age" required min="5" max="100">
 
-            <label>Gender</label>
+                <label>Gender</label>
+                <select name="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
 
-            <select name="gender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
+                <label>Phone Number</label>
+                <input type="tel" name="phone" placeholder="Enter phone number">
 
-            <label>Phone Number</label>
-            <input type="text" name="phone" placeholder="Enter Phone Number">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter email address">
 
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Enter Email">
+                <label>Address</label>
+                <textarea name="address" placeholder="Enter address"></textarea>
 
-            <label>Address</label>
-            <textarea name="address" placeholder="Enter Address"></textarea>
+                <label>Membership Plan</label>
+                <select name="plan">
+                    <option value="Basic">Basic</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Premium">Premium</option>
+                </select>
 
-            <label>Membership Plan</label>
+                <label>Join Date</label>
+                <input type="date" name="joinDate">
 
-            <select name="plan">
-                <option value="Basic">Basic</option>
-                <option value="Standard">Standard</option>
-                <option value="Premium">Premium</option>
-            </select>
+                <label>Expiry Date</label>
+                <input type="date" name="expiryDate">
 
-            <label>Join Date</label>
-            <input type="date" name="joinDate">
+                <div class="buttons">
+                    <button type="submit">✅ Save Member</button>
+                    <button type="reset">✕ Clear</button>
+                </div>
 
-            <label>Expiry Date</label>
-            <input type="date" name="expiryDate">
+            </form>
 
-            <div class="buttons">
-
-                <button type="submit">Save</button>
-
-                <button type="reset">Clear</button>
-
-            </div>
-
-        </form>
-
+        </div>
     </div>
 
+    <script src="app.js"></script>
 </body>
-
 </html>
