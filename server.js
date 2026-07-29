@@ -10,17 +10,18 @@ const session = require('express-session');
 const path    = require('path');
 
 const app  = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // ============================================================
 //  DATABASE CONNECTION
 // ============================================================
 const db = mysql.createConnection({
-    host    : 'localhost',
-    port    : 3306,
-    user    : 'root',
-    password: 'Jai@2007',
-    database: 'gym_management_system'
+    host    : process.env.DB_HOST     || 'localhost',
+    port    : process.env.DB_PORT     || 3306,
+    user    : process.env.DB_USER     || 'root',
+    password: process.env.DB_PASSWORD || 'Jai@2007',
+    database: process.env.DB_NAME     || 'gym_management_system',
+    ssl     : process.env.DB_HOST ? { rejectUnauthorized: false } : false
 });
 
 db.connect((err) => {
