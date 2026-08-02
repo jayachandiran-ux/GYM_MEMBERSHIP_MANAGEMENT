@@ -5,12 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="css/forms.css">
+    <style>
+        #attendanceSuccess {
+            display: none;
+            margin: 0 25px 10px 25px;
+            padding: 14px 18px;
+            background: #e8f5e9;
+            border: 1.5px solid #2e7d32;
+            border-radius: 8px;
+            color: #1b5e20;
+            font-weight: 600;
+            text-align: center;
+        }
+        #attendanceSuccess .success-icon { font-size: 20px; margin-right: 6px; }
+        .view-attendance-btn {
+            display: block;
+            margin: 12px 25px 0 25px;
+            padding: 11px;
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .view-attendance-btn:hover { background: #e05500; }
+    </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>🏋️ GYM MEMBERSHIP MANAGEMENT</h2>
+        <h2><img src="/images/gym_management_logo.avif" alt="Logo" style="width:28px;height:28px;object-fit:contain;border-radius:5px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2>
         <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </div>
 
@@ -18,12 +47,17 @@
 
         <h3>📋 Mark Attendance</h3>
 
+        <div id="attendanceSuccess">
+            <span class="success-icon">✅</span>
+            <span id="successText">Attendance saved successfully!</span>
+        </div>
+
         <div style="padding: 22px 25px 25px;">
 
             <form id="attendanceForm">
 
                 <label>Member ID</label>
-                <input type="number" name="memberId" placeholder="Enter Member ID" required>
+                <input type="number" name="memberId" id="memberIdInput" placeholder="Enter Member ID" required>
 
                 <label>Date</label>
                 <input type="date" name="date" required>
@@ -45,8 +79,45 @@
             </form>
 
         </div>
+
+        <a href="/api/today-attendance" class="view-attendance-btn">📋 View Today's Attendance</a>
+        <div style="height:16px;"></div>
+
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Override attendance form to show inline success with member name
+        const attendanceForm = document.getElementById('attendanceForm');
+        if (attendanceForm) {
+            attendanceForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const data = {};
+                new FormData(attendanceForm).forEach((val, key) => { data[key] = val; });
+
+                fetch('/api/attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success) {
+                        const name = result.memberName || ('Member #' + data.memberId);
+                        const successBox = document.getElementById('attendanceSuccess');
+                        document.getElementById('successText').textContent =
+                            'Attendance saved for ' + name + '!';
+                        successBox.style.display = 'block';
+                        attendanceForm.reset();
+                        // Auto-hide after 6 seconds
+                        setTimeout(() => { successBox.style.display = 'none'; }, 6000);
+                    } else {
+                        alert(result.message || 'Failed to save attendance. Please check the Member ID.');
+                    }
+                })
+                .catch(() => alert('Server error. Please try again.'));
+            });
+        }
+    </script>
 </body>
 </html>

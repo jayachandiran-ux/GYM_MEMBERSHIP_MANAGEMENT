@@ -1,12 +1,3 @@
-// ============================================================
-//  GYM MEMBERSHIP MANAGEMENT - Frontend JavaScript
-//  Connects all HTML forms to Node.js backend using fetch()
-//  No Tomcat. No Servlet. Pure JS ↔ Express API.
-// ============================================================
-
-// ============================================================
-//  UTILITY — submit any form as JSON via fetch
-// ============================================================
 function submitForm(formId, apiUrl, onSuccess, onError) {
     const form = document.getElementById(formId);
     if (!form) return;
@@ -104,16 +95,8 @@ if (document.getElementById('memberForm')) {
 
 // ============================================================
 //  PAGE: attendance.html
+//  (Handled inline in attendance.html for member name display)
 // ============================================================
-if (document.getElementById('attendanceForm')) {
-    submitForm('attendanceForm', '/api/attendance',
-        (res) => {
-            showSuccess('Attendance saved successfully!');
-            setTimeout(() => window.location.href = '/dashboard.html', 1200);
-        },
-        (msg) => { showError(msg || 'Failed to save attendance. Please check the Member ID.'); }
-    );
-}
 
 // ============================================================
 //  PAGE: payment.html

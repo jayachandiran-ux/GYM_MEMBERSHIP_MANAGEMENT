@@ -9,37 +9,59 @@
 </head>
 <body>
 
-    <div class="login-box">
-
-        <div class="login-logo">
+    <!-- LEFT PANEL -->
+    <div class="login-left">
+        <div class="brand-section">
             <img src="/images/gym_management_logo.avif" alt="Gym Logo">
+            <h1>GYM <span>MEMBERSHIP</span><br>MANAGEMENT</h1>
+            <p>A complete solution for managing your gym operations efficiently and professionally.</p>
         </div>
-        <h1>GYM MEMBERSHIP MANAGEMENT</h1>
-        <h3>Admin Login Portal</h3>
+        <div class="features-list">
+            <div class="feature-item"><span class="dot"></span> Member Registration & Management</div>
+            <div class="feature-item"><span class="dot"></span> Daily Attendance Tracking</div>
+            <div class="feature-item"><span class="dot"></span> Payment & Billing Records</div>
+            <div class="feature-item"><span class="dot"></span> Trainer Assignment</div>
+            <div class="feature-item"><span class="dot"></span> Reports & Analytics</div>
+        </div>
+    </div>
 
-        <form id="loginForm">
+    <!-- RIGHT PANEL -->
+    <div class="login-right">
+        <div class="login-box">
 
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username"
-                   placeholder="Enter your username" required autocomplete="username">
+            <h1>Welcome back</h1>
+            <h3>Sign in to your admin account</h3>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password"
-                   placeholder="Enter your password" required autocomplete="current-password">
+            <form id="loginForm">
 
-            <div class="button-box">
-                <button type="submit">🔐 Login</button>
-                <button type="reset">✕ Clear</button>
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="username" name="username"
+                           placeholder="Enter your username" required autocomplete="username">
+                </div>
+
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" name="password"
+                           placeholder="Enter your password" required autocomplete="current-password">
+                </div>
+
+                <div class="button-box">
+                    <button type="submit">Sign In →</button>
+                    <button type="reset">Clear</button>
+                </div>
+
+            </form>
+
+            <div class="divider">or</div>
+
+            <div class="register-link">
+                New admin? <a href="register.html">Create account</a>
             </div>
 
-        </form>
-
-        <div class="divider">or</div>
-
-        <div class="register-link">
-            New admin? <a href="register.html">Register here</a>
         </div>
-
     </div>
 
     <script src="app.js"></script>

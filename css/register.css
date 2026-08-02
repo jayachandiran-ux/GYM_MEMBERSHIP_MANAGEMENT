@@ -1,93 +1,158 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-body{
-    background:#eeeeee;
+body {
+    background: #f0f2f5;
+    min-height: 100vh;
 }
 
-.header{
-    background:#ff6600;
-    color:white;
-    text-align:center;
-    padding:20px;
+.header {
+    background: #1a1a2e;
+    color: white;
+    padding: 0 28px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 
-.register-box{
-    width:450px;
-    margin:50px auto;
-    background:white;
-    padding:30px;
-    border-radius:8px;
-    box-shadow:0px 0px 10px gray;
+.header h2 {
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.register-box h3{
-    text-align:center;
-    margin-bottom:25px;
-    color:#333;
+.register-box {
+    max-width: 480px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
-label{
-    font-weight:bold;
-    font-size:14px;
+.register-box h3 {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    padding: 20px 26px;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    border-bottom: 3px solid #e05500;
 }
 
-input{
-    width:100%;
-    padding:10px;
-    margin-top:6px;
-    margin-bottom:15px;
-    border:1px solid #999;
-    border-radius:5px;
-    font-size:15px;
+.register-box > div {
+    padding: 26px;
 }
 
-.buttons{
-    display:flex;
-    justify-content:space-between;
-    margin-top:10px;
+label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 6px;
+    margin-top: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
-button{
-    width:48%;
-    padding:12px;
-    border:none;
-    border-radius:5px;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
+label:first-of-type { margin-top: 0; }
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #333;
+    background: #f8f9fb;
+    transition: all 0.22s;
+    outline: none;
+    font-family: 'Inter', sans-serif;
 }
 
-button[type="submit"]{ background:#ff6600; }
-button[type="reset"]{ background:#555; }
-button:hover{ opacity:0.9; }
-
-.msg-success{
-    color:green;
-    text-align:center;
-    margin-bottom:15px;
-    font-weight:bold;
+input:focus {
+    border-color: #e05500;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(224,85,0,0.08);
 }
 
-.msg-error{
-    color:red;
-    text-align:center;
-    margin-bottom:15px;
-    font-weight:bold;
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
 }
 
-.login-link{
-    text-align:center;
-    margin-top:15px;
-    font-size:14px;
+button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s;
+    font-family: 'Inter', sans-serif;
 }
 
-.login-link a{
-    color:#ff6600;
-    text-decoration:none;
-    font-weight:bold;
+button[type="submit"] {
+    background: linear-gradient(135deg, #e05500, #ff7d3e);
+    color: white;
+    box-shadow: 0 4px 14px rgba(224,85,0,0.25);
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(224,85,0,0.35);
+}
+
+button[type="reset"] {
+    background: #f4f5f7;
+    color: #555;
+    border: 1.5px solid #e0e0e0;
+}
+
+button[type="reset"]:hover { background: #eaeaea; }
+
+.msg-success {
+    color: #2e7d32;
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.msg-error {
+    color: #c62828;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #888;
+}
+
+.login-link a {
+    color: #e05500;
+    font-weight: 600;
+    text-decoration: none;
 }

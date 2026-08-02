@@ -253,7 +253,7 @@ app.get('/api/member-list', (req, res) => {
     <link rel="stylesheet" href="/css/memberlist.css">
 </head>
 <body>
-    <div class="header"><h2>GYM MEMBERSHIP MANAGEMENT</h2></div>
+    <div class="header"><h2><img src="/images/gym_management_logo.avif" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:4px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2></div>
     <div class="list-box">
         <h3>Member List</h3>
         <div class="top-buttons">
@@ -355,7 +355,87 @@ app.get('/api/member-delete', (req, res) => {
 });
 
 // ============================================================
-//  MODULE 6 — ATTENDANCE
+//  TODAY'S ATTENDANCE VIEW
+//  GET /api/today-attendance
+// ============================================================
+app.get('/api/today-attendance', (req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+
+    const sql = `
+        SELECT a.attendance_id, a.member_id, m.full_name,
+               a.attendance_date, a.check_in_time, a.attendance_status
+        FROM attendance a
+        LEFT JOIN members m ON a.member_id = m.member_id
+        WHERE a.attendance_date = ?
+        ORDER BY a.attendance_id DESC`;
+
+    db.query(sql, [today], (err, rows) => {
+        let tableRows = '';
+        if (!err && rows.length > 0) {
+            rows.forEach(r => {
+                const statusColor = r.attendance_status === 'Present' ? '#2e7d32' : '#c62828';
+                const statusBg    = r.attendance_status === 'Present' ? '#e8f5e9' : '#ffebee';
+                tableRows += `
+                <tr>
+                    <td>${r.attendance_id}</td>
+                    <td>${r.member_id}</td>
+                    <td>${esc(r.full_name) || '-'}</td>
+                    <td>${esc(r.attendance_date)}</td>
+                    <td>${esc(r.check_in_time)}</td>
+                    <td><span style="color:${statusColor};background:${statusBg};padding:3px 10px;border-radius:12px;font-weight:bold;">${esc(r.attendance_status)}</span></td>
+                </tr>`;
+            });
+        } else if (!err && rows.length === 0) {
+            tableRows = `<tr><td colspan="6" style="text-align:center;color:#888;padding:20px;">No attendance records for today (${today})</td></tr>`;
+        } else {
+            tableRows = `<tr><td colspan="6" style="color:red;text-align:center;">Error: ${err.message}</td></tr>`;
+        }
+
+        res.send(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Today's Attendance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="/css/report.css">
+    <style>
+        .back-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+        .back-btn { background:#1a1a2e; color:white; border:none; padding:9px 18px; border-radius:8px; cursor:pointer; font-size:13px; text-decoration:none; }
+        .back-btn:hover { background:#333; }
+        .today-badge { background:#e05500; color:white; padding:5px 14px; border-radius:20px; font-size:13px; font-weight:bold; }
+        .count-info { font-size:13px; color:#888; margin-bottom:12px; }
+    </style>
+</head>
+<body>
+    <div class="header"><h2><img src="/images/gym_management_logo.avif" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:4px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2></div>
+    <div class="report-box">
+        <div class="back-bar">
+            <h3 style="margin:0;">📋 Today's Attendance</h3>
+            <span class="today-badge">${today}</span>
+        </div>
+        <p class="count-info">Total records: <strong>${rows ? rows.length : 0}</strong></p>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Member ID</th>
+                <th>Member Name</th>
+                <th>Date</th>
+                <th>Check-in Time</th>
+                <th>Status</th>
+            </tr>
+            ${tableRows}
+        </table>
+        <div class="buttons" style="margin-top:20px;">
+            <button onclick="location.href='/dashboard.html'">← Back to Dashboard</button>
+            <button onclick="window.print()">🖨 Print</button>
+        </div>
+    </div>
+</body>
+</html>`);
+    });
+});
+
 //  POST /api/attendance
 // ============================================================
 app.post('/api/attendance', (req, res) => {
@@ -365,7 +445,11 @@ app.post('/api/attendance', (req, res) => {
         [parseInt(memberId), date, checkInTime, status],
         (err) => {
             if (err) return res.json({ success: false, message: 'Failed to save attendance' });
-            res.json({ success: true });
+            // Fetch member name to return in success response
+            db.query('SELECT full_name FROM members WHERE member_id = ?', [parseInt(memberId)], (e2, rows) => {
+                const memberName = (!e2 && rows.length > 0) ? rows[0].full_name : null;
+                res.json({ success: true, memberName });
+            });
         }
     );
 });
@@ -459,7 +543,7 @@ app.get('/api/report', (req, res) => {
     <link rel="stylesheet" href="/css/report.css">
 </head>
 <body>
-    <div class="header"><h2>GYM MEMBERSHIP MANAGEMENT</h2></div>
+    <div class="header"><h2><img src="/images/gym_management_logo.avif" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:4px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2></div>
     <div class="report-box">
         <h3>Member Report</h3>
         <table>
@@ -476,6 +560,180 @@ app.get('/api/report', (req, res) => {
     </div>
 </body>
 </html>`);
+    });
+});
+
+// ============================================================
+//  PAYMENT HISTORY
+//  GET /api/payment-history
+// ============================================================
+app.get('/api/payment-history', (req, res) => {
+    const sql = `
+        SELECT p.payment_id, p.member_id, m.full_name,
+               p.amount, p.payment_date, p.payment_method, p.payment_status
+        FROM payments p
+        LEFT JOIN members m ON p.member_id = m.member_id
+        ORDER BY p.payment_id DESC`;
+
+    db.query(sql, (err, rows) => {
+        let tableRows = '';
+        let totalAmount = 0.0;
+        if (!err && rows.length > 0) {
+            rows.forEach(r => {
+                const statusColor = r.payment_status === 'Paid' ? '#2e7d32' : '#c62828';
+                const statusBg    = r.payment_status === 'Paid' ? '#e8f5e9' : '#ffebee';
+                totalAmount += parseFloat(r.amount) || 0;
+                tableRows += `
+                <tr>
+                    <td>${r.payment_id}</td>
+                    <td>${r.member_id}</td>
+                    <td>${esc(r.full_name) || '-'}</td>
+                    <td>₹${parseFloat(r.amount || 0).toFixed(2)}</td>
+                    <td>${formatDate(r.payment_date)}</td>
+                    <td>${esc(r.payment_method)}</td>
+                    <td><span style="color:${statusColor};background:${statusBg};padding:3px 10px;border-radius:12px;font-weight:bold;">${esc(r.payment_status)}</span></td>
+                </tr>`;
+            });
+        } else if (!err) {
+            tableRows = `<tr><td colspan="7" style="text-align:center;color:#888;padding:20px;">No payment records found.</td></tr>`;
+        } else {
+            tableRows = `<tr><td colspan="7" style="color:red;text-align:center;">Error: ${err.message}</td></tr>`;
+        }
+
+        res.send(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment History</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="/css/report.css">
+    <style>
+        .back-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+        .back-btn { background:#1a1a2e; color:white; border:none; padding:9px 18px; border-radius:8px; cursor:pointer; font-size:13px; text-decoration:none; }
+        .back-btn:hover { background:#333; }
+        .summary-bar { display:flex; gap:24px; margin-bottom:14px; flex-wrap:wrap; }
+        .summary-item { background:#f4f5f7; border-radius:8px; padding:9px 18px; font-size:13px; color:#555; }
+        .summary-item strong { color:#1a1a2e; font-size:15px; }
+    </style>
+</head>
+<body>
+    <div class="header"><h2><img src="/images/gym_management_logo.avif" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:4px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2></div>
+    <div class="report-box">
+        <div class="back-bar">
+            <h3 style="margin:0;">💰 Payment History</h3>
+        </div>
+        <div class="summary-bar">
+            <div class="summary-item">Total Records: <strong>${rows ? rows.length : 0}</strong></div>
+            <div class="summary-item">Total Amount: <strong>₹${totalAmount.toFixed(2)}</strong></div>
+        </div>
+        <table>
+            <tr>
+                <th>Payment ID</th>
+                <th>Member ID</th>
+                <th>Member Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Method</th>
+                <th>Status</th>
+            </tr>
+            ${tableRows}
+        </table>
+        <div class="buttons" style="margin-top:20px;">
+            <button onclick="location.href='/dashboard.html'">← Back to Dashboard</button>
+            <button onclick="window.print()">🖨 Print</button>
+        </div>
+    </div>
+</body>
+</html>`);
+    });
+});
+
+// ============================================================
+//  ACTIVE MEMBERS
+//  GET /api/active-members
+// ============================================================
+app.get('/api/active-members', (req, res) => {
+    db.query("SELECT COUNT(*) AS total FROM members WHERE membership_status = 'Active'", (err, countResult) => {
+        const total = err ? 0 : countResult[0].total;
+
+        db.query(
+            `SELECT member_id, full_name, age, gender, phone_number, email,
+                    membership_plan, join_date, expiry_date, membership_status
+             FROM members WHERE membership_status = 'Active' ORDER BY member_id DESC`,
+            (err2, rows) => {
+                let tableRows = '';
+                if (!err2 && rows.length > 0) {
+                    rows.forEach(r => {
+                        tableRows += `
+                        <tr>
+                            <td>${r.member_id}</td>
+                            <td>${esc(r.full_name)}</td>
+                            <td>${r.age}</td>
+                            <td>${esc(r.gender)}</td>
+                            <td>${esc(r.phone_number)}</td>
+                            <td>${esc(r.email)}</td>
+                            <td>${esc(r.membership_plan)}</td>
+                            <td>${formatDate(r.join_date)}</td>
+                            <td>${formatDate(r.expiry_date)}</td>
+                            <td><span style="color:#2e7d32;background:#e8f5e9;padding:3px 10px;border-radius:12px;font-weight:bold;">Active</span></td>
+                        </tr>`;
+                    });
+                } else {
+                    tableRows = `<tr><td colspan="10" style="text-align:center;color:#888;padding:20px;">No active members found.</td></tr>`;
+                }
+
+                res.send(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Active Members</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/avif" href="/images/gym_management_logo.avif">
+    <link rel="stylesheet" href="/css/memberlist.css">
+    <style>
+        .back-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+        .active-badge { background:#2e7d32; color:white; padding:5px 14px; border-radius:20px; font-size:13px; font-weight:bold; }
+    </style>
+</head>
+<body>
+    <div class="header"><h2><img src="/images/gym_management_logo.avif" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:4px;vertical-align:middle;margin-right:8px;background:rgba(255,255,255,0.1);padding:2px;">GYM MEMBERSHIP MANAGEMENT</h2></div>
+    <div class="list-box">
+        <div class="back-bar">
+            <h3>🏃 Active Members</h3>
+            <span class="active-badge">Active Only</span>
+        </div>
+        <div class="top-buttons">
+            <a href="/dashboard.html" class="btn-back">&#8592; Back to Dashboard</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by name, phone, email...">
+            </div>
+        </div>
+        <p class="total">Active Members: <strong>${total}</strong></p>
+        <div class="table-wrap">
+        <table id="memberTable">
+            <tr>
+                <th>ID</th><th>Name</th><th>Age</th><th>Gender</th>
+                <th>Phone</th><th>Email</th><th>Plan</th>
+                <th>Join Date</th><th>Expiry Date</th><th>Status</th>
+            </tr>
+            ${tableRows}
+        </table>
+        </div>
+    </div>
+    <script>
+        function searchTable() {
+            var input = document.getElementById('searchInput').value.toLowerCase();
+            var rows = document.querySelectorAll('#memberTable tr');
+            for (var i = 1; i < rows.length; i++) {
+                rows[i].style.display = rows[i].innerText.toLowerCase().includes(input) ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>`);
+            }
+        );
     });
 });
 
@@ -516,3 +774,4 @@ app.listen(PORT, () => {
     console.log('============================================');
     console.log('');
 });
+
